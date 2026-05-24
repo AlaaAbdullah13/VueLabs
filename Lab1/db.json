@@ -8,7 +8,7 @@
       "badge": "NEW",
       "price": 120,
       "discount": 20,
-      "stock": 17,
+      "stock": 13,
       "tags": [
         "Fashion",
         "Casual",
@@ -23,7 +23,7 @@
       "badge": "",
       "price": 90,
       "discount": 10,
-      "stock": 11,
+      "stock": 10,
       "tags": [
         "Sport",
         "Running"
@@ -51,7 +51,7 @@
       "badge": "",
       "price": 30,
       "discount": 50,
-      "stock": 19,
+      "stock": 17,
       "tags": [
         "Summer",
         "Casual"

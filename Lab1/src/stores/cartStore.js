@@ -31,14 +31,12 @@ export const useCartStore = defineStore('cart', () => {
       });
     }
 
-    // Requirement: Also calls productStore.decreaseStock
     productStore.decreaseStock(product.id);
   };
 
   const incrementQty = (productId) => {
     const item = items.value.find(i => i.id == productId);
     if (item) {
-      // Find the product in productStore to check stock
       const product = productStore.getProductById(productId);
       if (product && product.stock > 0) {
         item.qty++;
@@ -46,27 +44,25 @@ export const useCartStore = defineStore('cart', () => {
       }
     }
   };
-
-  const decrementQty = (productId) => {
-    const index = items.value.findIndex(i => i.id == productId);
-    if (index !== -1) {
-      const item = items.value[index];
-      item.qty--;
-      productStore.increaseStock(productId);
-
-      if (item.qty <= 0) {
-        items.value.splice(index, 1);
-      }
-    }
-  };
-
-  const removeFromCart = (id) => {
+  
+const removeFromCart = (id) => {
     const index = items.value.findIndex(item => item.id == id);
     if (index !== -1) {
       const item = items.value[index];
-      // Return quantity to stock
       productStore.increaseStock(id, item.qty);
       items.value.splice(index, 1);
+    }
+  };
+
+  const decrementQty = (productId) => {
+    const item = items.value.find(i => i.id == productId);
+    if (!item) return;
+
+    if (item.qty > 1) {
+      item.qty--;
+      productStore.increaseStock(productId, 1);
+    } else {
+      removeFromCart(productId);
     }
   };
 

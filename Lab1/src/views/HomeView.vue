@@ -24,13 +24,11 @@ onUnmounted(() => console.log("HomeView unmounted"));
 
 <template>
   <div class="max-w-6xl mx-auto p-12 space-y-12">
-    <!-- Loading State (Only if products are empty) -->
     <div v-if="(!productStore.products || productStore.products.length === 0)" class="flex flex-col items-center justify-center py-32 space-y-4">
       <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       <p class="text-gray-400 font-medium animate-pulse">Loading amazing sneakers...</p>
     </div>
 
-    <!-- Error State -->
     <div v-else-if="productStore.error" class="bg-red-50 border border-red-100 p-8 rounded-[30px] text-center">
       <div class="text-4xl mb-4">⚠️</div>
       <h3 class="text-red-900 font-bold text-xl mb-2">Oops! Something went wrong</h3>
@@ -43,7 +41,6 @@ onUnmounted(() => console.log("HomeView unmounted"));
     <template v-else-if="selected">
       <CarouselBanner />
 
-      <!-- Featured Product -->
       <div class="group relative bg-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] border border-gray-50 rounded-[40px] mb-16 overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
         <div class="absolute top-8 right-8 bg-[#e7f6ed] text-[#34a853] text-xs font-bold px-4 py-2 rounded-full uppercase z-10 transition-transform duration-300 group-hover:scale-110">
           Stock: {{ selected.stock }}
@@ -73,7 +70,6 @@ onUnmounted(() => console.log("HomeView unmounted"));
         </div>
       </div>
 
-      <!-- Product Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
         <ProductCard 
           v-for="p in productStore.products.filter(x => x.id !== selected.id)" 

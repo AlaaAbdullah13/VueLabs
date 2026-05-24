@@ -7,24 +7,25 @@ import { useProductStore } from '../stores/productStore';
 const cartStore = useCartStore();
 const productStore = useProductStore();
 
-// Bonus Task: Checkout Form
 const name = ref('');
 const address = ref('');
 const orderPlaced = ref(false);
 
 const isFormValid = computed(() => {
-  return name.value.trim().length > 2 && address.value.trim().length > 5;
+  const nameRegex = /^[a-zA-Z\s]+$/;
+  const isNameValid = name.value.trim().length > 2 && nameRegex.test(name.value);
+  const isAddressValid = address.value.trim().length > 5;
+  
+  return isNameValid && isAddressValid;
 });
 
 const handleCheckout = () => {
   if (isFormValid.value) {
     cartStore.clearCart();
     orderPlaced.value = true;
-    // Reset form
     name.value = '';
     address.value = '';
     
-    // Smooth reset message after 5 seconds
     setTimeout(() => {
       orderPlaced.value = false;
     }, 5000);
@@ -42,7 +43,6 @@ onUnmounted(() => console.log("CartView unmounted"));
       <RouterLink to="/" class="text-indigo-600 font-bold hover:underline">← Back to Store</RouterLink>
     </div>
 
-    <!-- Empty Cart State -->
     <div v-if="cartStore.items.length === 0 && !orderPlaced" class="bg-white border border-gray-100 shadow-[0_15px_50px_rgba(0,0,0,0.05)] rounded-[40px] p-20 text-center">
       <div class="text-6xl mb-6">🛒</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-2">Wait, your cart is empty!</h2>
@@ -52,9 +52,7 @@ onUnmounted(() => console.log("CartView unmounted"));
       </RouterLink>
     </div>
 
-    <!-- Success Message -->
     <div v-else-if="orderPlaced" class="bg-green-50 border border-green-100 rounded-[40px] p-20 text-center animate-in fade-in zoom-in duration-500">
-      <div class="text-6xl mb-6">🤟</div>
       <h2 class="text-2xl font-bold text-green-900 mb-2">Order Confirmed!</h2>
       <p class="text-green-600 mb-8 max-w-sm mx-auto">Thank you for shopping with SneakerHub. Your order is now being processed by our specialists.</p>
       <RouterLink to="/" class="bg-green-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-green-700 transition-all shadow-lg active:scale-95">
@@ -62,9 +60,7 @@ onUnmounted(() => console.log("CartView unmounted"));
       </RouterLink>
     </div>
 
-    <!-- Cart Layout -->
     <div v-else class="grid lg:grid-cols-3 gap-12">
-      <!-- Items List -->
       <div class="lg:col-span-2 space-y-6">
         <div v-for="item in cartStore.items" :key="item.id" class="bg-white p-6 rounded-[30px] border border-gray-50 shadow-sm flex items-center gap-6 group hover:shadow-md transition-shadow">
           <div class="w-24 h-24 bg-gray-50 rounded-2xl flex items-center justify-center p-2">
@@ -108,7 +104,6 @@ onUnmounted(() => console.log("CartView unmounted"));
         </div>
       </div>
 
-      <!-- Order Summary & Checkout -->
       <div class="space-y-6">
         <div class="bg-white p-8 rounded-[40px] border border-gray-100 shadow-[0_15px_50px_rgba(0,0,0,0.03)]">
           <h2 class="text-xl font-bold mb-6 text-gray-900">Summary</h2>
@@ -128,15 +123,16 @@ onUnmounted(() => console.log("CartView unmounted"));
             </div>
           </div>
 
-          <!-- Bonus Form -->
           <form @submit.prevent="handleCheckout" class="space-y-4">
             <div class="space-y-1">
               <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
-              <input v-model="name" type="text" placeholder="John Doe" class="w-full bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-100 outline-none" required />
+              <input v-model="name" type="text" placeholder="Alaa Salem" class="w-full bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-100 outline-none" required />
+              <p v-if="name.length > 0 && !/^[a-zA-Z\s]+$/.test(name)" class="text-red-500 text-[10px] mt-1 ml-1">Name must contain letters only.</p>
             </div>
             <div class="space-y-1">
               <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Shipping Address</label>
-              <input v-model="address" type="text" placeholder="123 Sneaker St, NYC" class="w-full bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-100 outline-none" required />
+              <input v-model="address" type="text" placeholder="123 future St" class="w-full bg-gray-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-100 outline-none" required />
+              <p v-if="address.length > 0 && address.trim().length <= 5" class="text-red-500 text-[10px] mt-1 ml-1">Address must be more than 5 characters.</p>
             </div>
             <button 
               type="submit" 

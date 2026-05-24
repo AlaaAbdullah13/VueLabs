@@ -30,13 +30,11 @@ onUnmounted(() => console.log("ProductView unmounted"));
 
 <template>
   <div class="max-w-6xl mx-auto p-12 space-y-12">
-    <!-- Loading State: Show if products are empty or if explicitly loading -->
     <div v-if="(!productStore.products || productStore.products.length === 0) || (productStore.loading && !product)" class="flex flex-col items-center justify-center py-32 space-y-4">
       <div class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
       <p class="text-gray-400 font-medium animate-pulse">Initializing SneakerHub...</p>
     </div>
 
-    <!-- Error State -->
     <div v-else-if="productStore.error" class="bg-red-50 border border-red-100 p-8 rounded-[30px] text-center">
       <div class="text-4xl mb-4">⚠️</div>
       <h3 class="text-red-900 font-bold text-xl mb-2">Oops! Something went wrong</h3>

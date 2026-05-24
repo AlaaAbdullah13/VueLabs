@@ -18,10 +18,8 @@ export const useProductStore = defineStore('product', () => {
     const product = getProductById(productId);
     if (product && product.stock > 0) {
       const updatedProduct = { ...product, stock: product.stock - 1 };
-      // Requirement: Update json-server using PUT with full object
       await update('products', productId, updatedProduct, true);
 
-      // Update local state after successful API call
       if (!error.value) {
         const index = products.value.findIndex(p => p.id == productId);
         if (index !== -1) {
